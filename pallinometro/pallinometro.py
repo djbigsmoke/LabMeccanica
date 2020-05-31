@@ -79,9 +79,9 @@ while i <= len(nlineelist):
              marker='o',markersize=3,linestyle='none',label="Previsione")
     
     #finisco di disegnare il grafico
-    plt.xlabel("")
-    plt.ylabel("")
-    plt.legend()  
+    plt.xlabel("Tasca",fontsize=13)
+    plt.ylabel("Occorrenze",fontsize=13)
+    plt.legend(fontsize=13)  
     plt.savefig("data/"+str(i)+".png")
     plt.clf()
     
@@ -122,3 +122,4 @@ while i <= len(nlineelist):
     i += 1 #incremento il contatore
 
 print ("Fine esecuzione del codice")
+
