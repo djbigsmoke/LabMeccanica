@@ -15,6 +15,7 @@ N_misure = 200
 nlineelist = [5, 5, 5, 25, 25, 25, 50, 50, 50] #lista dei numeri di righe
 plist = [0.05, 0.25, 0.5, 0.05, 0.25, 0.5, 0.05, 0.25, 0.5] #lista delle probabilità impostate per ciascun esperimento
 delimitatore = '\t' #delimitatore per i valori dat (al momento è una tablatura)
+chi2values = [11.070, 11.070, 11.070, 37.652, 37.652, 37.652, 67.505, 67.505, 67.505] #i 9 valori limite per la validità del chi quadro
 
 #ciclo principale
 i = 1
@@ -55,14 +56,14 @@ while i <= len(nlineelist):
     xmax = nlinee+1
     Nbins= xmax-xmin
     y, bins, patches= plt.hist(col2,bins=Nbins,range=(xmin-0.5,xmax-0.5),label="Data")
-
-
+    
+    
     #CALCOLO LA DISTRIBUZIONE BINOMIALE
     p = plist[(i-1)]
     n = nlineelist[(i-1)]
     x = list(range(0,(int(nlineelist[(i-1)])+1)))
     l = 1
-
+    
     bn = binom.pmf(x, n, p)
     binomm = (bn)*N_misure
     
@@ -76,7 +77,7 @@ while i <= len(nlineelist):
              binomm,
              yerr=sigma_bin,
              marker='o',markersize=3,linestyle='none',label="Previsione")
-
+    
     #finisco di disegnare il grafico
     plt.xlabel("")
     plt.ylabel("")
@@ -87,7 +88,7 @@ while i <= len(nlineelist):
     #Calcolo la probabilità di successo supponendo che sia la media della colonna Y diviso il numero di righe
     mmean = np.mean(np.asarray(col2))
     probsuccesso = mmean/nlineelist[(i-1)]
-
+    
     #Calcolo l'errore sulla probabilità di successo
     sigmap = probsuccesso/(math.sqrt(N_misure) * math.sqrt(Nbins))
     
@@ -99,10 +100,17 @@ while i <= len(nlineelist):
     print ("passo: "+str(i))
     print ("1 - Salvo su file l'istogramma")
     print ("2 - La probabilità di successo è "+str(probsuccesso))
-    print ("( Errore associato alla probabilità di successo: "+str(sigmap))
+    print ("( Errore associato alla probabilità di successo: "+str(sigmap)+" )")
     print ("3 - Test del Chi Quadro:")
     print (showchi2)
-    
+    #stampo la validità del chi2
+    print ("Validità del test")
+    if showchi2 < chi2values[(i-1)]:
+        print (str(showchi2)+" < "+str(chi2values[(i-1)])+" : valido")
+    else:
+        print (str(showchi2)+" > "+str(chi2values[(i-1)])+" : non valido")
+
+
     #ripristino le variabili per la prossima iterazione
     xmin, xmax, nlinee, mylambda, Nbins = "","","","",""
     data1, col1, col2, col3, x, = [], [], [], [], []
